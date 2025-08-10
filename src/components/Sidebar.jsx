@@ -21,7 +21,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`flex flex-col h-full border-r shadow-sm bg-gray-50 transition-[width] duration-300 ease-in-out
+      className={`flex flex-col h-full border-r shadow-sm bg-gray-100 transition-[width] duration-300 ease-in-out
         ${expandSidebar ? "w-64" : "w-16"}`}
     >
       <div className="flex flex-col flex-1 overflow-hidden">
