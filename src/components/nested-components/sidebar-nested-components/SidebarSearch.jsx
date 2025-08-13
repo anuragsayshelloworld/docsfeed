@@ -2,7 +2,7 @@ import { Search as SearchIcon } from "lucide-react";
 export default function SidebarSearch({ expanded }) {
   return (
     <div
-      className={`flex items-center p-3 m-2 h-10 rounded-lg group hover:bg-gray-100 transition 
+      className={`flex items-center p-3 m-2 h-10 rounded-lg group hover:bg-gray-200 transition 
       ${expanded ? "justify-start" : "justify-center"}`}
       title={!expanded ? "Search" : undefined}
       aria-label="Search"

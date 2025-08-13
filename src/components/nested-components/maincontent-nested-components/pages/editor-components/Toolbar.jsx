@@ -9,6 +9,7 @@ import {
   Heading1,
   Heading2,
   AlignJustify,
+  FileCode,
 } from "lucide-react";
 export default function EditorToolbar({
   workSpace,
@@ -38,6 +39,13 @@ export default function EditorToolbar({
       action: () => workSpace.chain().focus().toggleCode().run(),
       isActive: () => workSpace.isActive("code"),
       label: "Code",
+    },
+    {
+      id: "codeBlock",
+      icon: FileCode,
+      action: () => workSpace.chain().focus().toggleCodeBlock().run(),
+      isActive: () => workSpace.isActive("codeBlock"),
+      label: "codeBlock",
     },
     { id: "separator" },
     {

@@ -3,7 +3,7 @@ export default function SidebarToggle({ expanded, onToggle }) {
   return (
     <button
       onClick={onToggle}
-      className="flex items-center p-3 m-2 h-10 hover:bg-gray-100 transition rounded-lg group"
+      className="flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group"
       title="Toggle sidebar"
       aria-label="Toggle sidebar"
     >

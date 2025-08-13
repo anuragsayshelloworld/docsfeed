@@ -38,7 +38,7 @@ export default function SidebarList({ expanded }) {
         {items.map((text, index) => (
           <div
             key={index}
-            className="group flex justify-between items-center px-3 py-2 rounded-md hover:bg-gray-100 cursor-pointer text-sm text-gray-800"
+            className="group flex justify-between items-center px-3 py-2 rounded-md hover:bg-gray-200 cursor-pointer text-sm text-gray-800"
           >
             <span className="truncate flex-1">{text}</span>
             <MoreVertical className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
