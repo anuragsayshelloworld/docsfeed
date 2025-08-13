@@ -1,25 +1,96 @@
+// firebase.js
 import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
+// Your Firebase configuration
 const firebaseConfiguration = {
-  apiKey: "AIzaSyDfqQgC5nCKW0k236HlIiZn0B0E-Kw0FYw",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "docfeed.firebaseapp.com",
   projectId: "docfeed",
   storageBucket: "docfeed.firebasestorage.app",
   messagingSenderId: "584547794889",
   appId: "1:584547794889:web:746f61b5a40bf01559f218",
 };
+
+// Initialize Firebase
 const app = initializeApp(firebaseConfiguration);
 
+// Get Firestore instance
 const db = getFirestore(app);
 
-export const saveToFirebase = async (content) => {
-  console.log("Content to save:", content);
+/**
+ * Save a document to Firestore with a title and HTML content.
+ * @param {Object} data
+ * @param {string} data.title - The title of the document.
+ * @param {string} data.content - The HTML content to save.
+ */
+export const saveToFirebase = async ({ title, content }) => {
+  try {
+    console.log("Saving to Firebase:", { title, content });
 
-  await setDoc(doc(db, "documents", "my-first-doc"), {
-    html: content,
-    savedAt: new Date(),
-  });
+    const docRef = await addDoc(collection(db, "documents"), {
+      title,
+      html: content,
+      savedAt: new Date(),
+    });
 
-  console.log("Saved to Firebase! 🎉");
+    console.log("Saved to Firebase with ID:", docRef.id);
+  } catch (error) {
+    console.error("Error saving document:", error);
+  }
+};
+
+/**
+ * Fetch all saved documents from Firestore, ordered by most recent.
+ * @returns {Promise<Array>} Array of documents with id, title, html, savedAt
+ */
+export const fetchDocuments = async () => {
+  try {
+    const docsQuery = query(
+      collection(db, "documents"),
+      orderBy("savedAt", "desc")
+    );
+
+    const querySnapshot = await getDocs(docsQuery);
+
+    const docsList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return docsList;
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    return [];
+  }
+};
+
+/**
+ * Fetch a single document by its ID.
+ * @param {string} id - Firestore document ID.
+ * @returns {Promise<Object|null>} The document object or null if not found.
+ */
+export const fetchDocumentById = async (id) => {
+  try {
+    const docRef = doc(db, "documents", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.warn(`Document with id "${id}" not found.`);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error fetching document with id "${id}":`, error);
+    return null;
+  }
 };

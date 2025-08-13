@@ -4,6 +4,7 @@ import SidebarToggle from "./nested-components/sidebar-nested-components/Sidebar
 import SidebarItem from "./nested-components/sidebar-nested-components/SidebarItem";
 import SidebarSearch from "./nested-components/sidebar-nested-components/SidebarSearch";
 import useMobile from "../hooks/useMobile";
+import SidebarLogo from "./nested-components/sidebar-nested-components/SidebarLogo";
 
 const SidebarList = lazy(() =>
   import("./nested-components/sidebar-nested-components/SidebarList")
@@ -25,6 +26,7 @@ export default function Sidebar() {
         ${expandSidebar ? "w-64" : "w-16"}`}
     >
       <div className="flex flex-col flex-1 overflow-hidden">
+        <SidebarLogo expanded={expandSidebar} />
         <SidebarToggle
           expanded={expandSidebar}
           onToggle={() => setExpandSideBar(!expandSidebar)}
