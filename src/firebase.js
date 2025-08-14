@@ -8,6 +8,7 @@ import {
   query,
   orderBy,
   doc,
+  where,
   getDoc,
 } from "firebase/firestore";
 
@@ -94,3 +95,16 @@ export const fetchDocumentById = async (id) => {
     return null;
   }
 };
+
+export async function UserLogin(username) {
+  const credentialRef = collection(db, "credentials");
+  const q = query(credentialRef, where("username", "==", username));
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return false;
+  } else {
+    // check for password!
+    console.log(querySnapshot);
+    return true;
+  }
+}
