@@ -1,12 +1,16 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import parse from "html-react-parser";
 import { FileText } from "lucide-react";
 import LoaderSpinner from "../../../../../LoaderSpinner";
 import CodeBlock from "./CodeBlock";
 import "../../../../../css/viewer.css";
+import { useNavigate } from "react-router-dom";
+import ModeContext from "../../../../../context/ModeContext";
 
 export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
+  const navigate = useNavigate();
+  const { setData } = useContext(ModeContext);
 
   if (isLoading) {
     return (
@@ -38,14 +42,25 @@ export default function MainContent({ doc, isLoading }) {
     }
   };
 
+  function handleNavigate() {
+    //setMode("edit");
+    // use set mode for the publish or update
+    //setTitle also require to do titile
+    setData(doc.html);
+    navigate("/editor");
+  }
+
   return (
-    <div className="flex-1 flex justify-center p-4">
-      <div className="w-full max-w-4xl" ref={containerRef}>
-        <h1 className="text-2xl font-bold mb-4">{doc.title}</h1>
-        <div className="innerDoc">
-          {parse(doc.html, { replace: transform })}
+    <>
+      <button onClick={handleNavigate}>Edit</button>
+      <div className="flex-1 flex justify-center p-4">
+        <div className="w-full max-w-4xl" ref={containerRef}>
+          <h1 className="text-2xl font-bold mb-4">{doc.title}</h1>
+          <div className="innerDoc">
+            {parse(doc.html, { replace: transform })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

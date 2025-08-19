@@ -5,10 +5,12 @@ import { saveToFirebase } from "../../../../firebase.js";
 import EditorToolbar from "./editor-components/Toolbar.jsx";
 import TitleInput from "./editor-components/TitleInput.jsx";
 import "../../../../css/editor.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import EditorContentWrapper from "./editor-components/EditorArea.jsx";
+import ModeContext from "../../../../context/ModeContext.jsx";
 
 export default function Editor() {
+  const { data } = useContext(ModeContext);
   const [, setRefresh] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState("");
@@ -16,6 +18,7 @@ export default function Editor() {
 
   const workSpace = useEditor({
     extensions: [StarterKit],
+    content: data || "",
     onUpdate: ({ editor }) => {
       const text = editor.getText();
       setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);

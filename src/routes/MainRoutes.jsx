@@ -6,6 +6,7 @@ import LoaderSpinner from "../LoaderSpinner";
 import Documentation from "../components/nested-components/maincontent-nested-components/pages/Documentation";
 import DocumentViewer from "../components/nested-components/maincontent-nested-components/pages/DocumentViewer";
 import Login from "../pages/Login";
+import { ModeProvider } from "../context/ModeContext";
 const Editor = lazy(() =>
   import(
     "../components/nested-components/maincontent-nested-components/pages/Editor"
@@ -14,29 +15,31 @@ const Editor = lazy(() =>
 export default function MainRoutes() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Layout />{" "}
-            </ProtectedRoute>
-          }
-        >
+      <ModeProvider>
+        <Routes>
           <Route
-            index
+            path="/"
             element={
-              <Suspense fallback={<LoaderSpinner />}>
-                <Documentation />
-              </Suspense>
+              <ProtectedRoute>
+                <Layout />{" "}
+              </ProtectedRoute>
             }
-          />
-          <Route path="/editor" element={<Editor />} />
-          <Route path="/viewer/:id" element={<DocumentViewer />} />
-        </Route>
+          >
+            <Route
+              index
+              element={
+                <Suspense fallback={<LoaderSpinner />}>
+                  <Documentation />
+                </Suspense>
+              }
+            />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/viewer/:id" element={<DocumentViewer />} />
+          </Route>
 
-        <Route path="/login" element={<Login />} />
-      </Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </ModeProvider>
     </BrowserRouter>
   );
 }
