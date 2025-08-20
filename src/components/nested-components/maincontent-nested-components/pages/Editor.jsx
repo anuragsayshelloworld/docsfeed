@@ -52,6 +52,14 @@ export default function Editor() {
     };
   }, [workSpace]);
 
+  useEffect(() => {
+    //worsSpace.getHttml le current html content bhitra j chha tyo dinchha..
+    // compares with new data or "" (its always null via context)
+    if (workSpace && workSpace.getHTML() !== (data || "")) {
+      workSpace.commands.setContent(data || "");
+    }
+  }, [data, workSpace]);
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -63,6 +71,7 @@ export default function Editor() {
       <TitleInput title={title} onTitleChange={handleTitleChange} />
 
       <EditorToolbar
+        data={data}
         workSpace={workSpace}
         onPublish={publish}
         isPublishing={isPublishing}

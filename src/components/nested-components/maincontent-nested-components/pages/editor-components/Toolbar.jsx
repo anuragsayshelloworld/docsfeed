@@ -17,6 +17,7 @@ export default function EditorToolbar({
   isPublishing,
   title,
   wordCount,
+  data,
 }) {
   const toolbarButtons = [
     {
@@ -139,9 +140,12 @@ export default function EditorToolbar({
           }`}
         >
           <Send className={`w-4 h-4 ${isPublishing ? "animate-pulse" : ""}`} />
-          <span className="font-medium">
-            {isPublishing ? "Publishing..." : "Publish"}
-          </span>
+          {data && <span>Update</span>}
+          {!data && (
+            <span className="font-medium">
+              {isPublishing ? "Publishing..." : "Publish"}
+            </span>
+          )}
         </button>
       </div>
     </div>
