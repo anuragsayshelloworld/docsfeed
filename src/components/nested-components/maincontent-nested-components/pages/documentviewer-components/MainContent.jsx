@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
 import parse from "html-react-parser";
-import { FileText } from "lucide-react";
+import { FileText, Edit } from "lucide-react";
 import LoaderSpinner from "../../../../../LoaderSpinner";
 import CodeBlock from "./CodeBlock";
 import "../../../../../css/viewer.css";
@@ -51,16 +51,22 @@ export default function MainContent({ doc, isLoading }) {
   }
 
   return (
-    <>
-      <button onClick={handleNavigate}>Edit</button>
-      <div className="flex-1 flex justify-center p-4">
-        <div className="w-full max-w-4xl" ref={containerRef}>
-          <h1 className="text-2xl font-bold mb-4">{doc.title}</h1>
-          <div className="innerDoc">
-            {parse(doc.html, { replace: transform })}
-          </div>
+    <div className="flex-1 flex justify-center p-4">
+      <div className="w-full max-w-4xl" ref={containerRef}>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">{doc.title}</h1>
+          <button
+            onClick={handleNavigate}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm"
+          >
+            <Edit className="w-4 h-4" />
+            Edit
+          </button>
+        </div>
+        <div className="innerDoc z-10">
+          {parse(doc.html, { replace: transform })}
         </div>
       </div>
-    </>
+    </div>
   );
 }
