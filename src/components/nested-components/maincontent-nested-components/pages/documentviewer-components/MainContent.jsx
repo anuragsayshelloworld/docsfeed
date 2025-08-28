@@ -1,11 +1,12 @@
 import { useContext, useRef } from "react";
 import parse from "html-react-parser";
-import { FileText, Edit } from "lucide-react";
+import { FileText, Edit, Trash2 } from "lucide-react";
 import LoaderSpinner from "../../../../../LoaderSpinner";
 import CodeBlock from "./CodeBlock";
 import "../../../../../css/viewer.css";
 import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../../../context/ModeContext";
+import { deleteDocument } from "../../../../../firebase";
 
 export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
@@ -49,7 +50,11 @@ export default function MainContent({ doc, isLoading }) {
     setMode("edit");
     setTitle(doc.title);
     setData(doc.html);
-    navigate(`/editor/edit`);
+    navigate(`/editor/edit`, { state: doc.id });
+  }
+  async function handleDelete() {
+    await deleteDocument(doc.id);
+    navigate("/");
   }
 
   return (
@@ -57,13 +62,22 @@ export default function MainContent({ doc, isLoading }) {
       <div className="w-full max-w-4xl" ref={containerRef}>
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">{doc.title}</h1>
-          <button
-            onClick={handleNavigate}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm"
-          >
-            <Edit className="w-4 h-4" />
-            Edit
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleNavigate}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm"
+            >
+              <Edit className="w-4 h-4" />
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </button>
+          </div>
         </div>
         <div className="innerDoc z-10">
           {parse(doc.html, { replace: transform })}

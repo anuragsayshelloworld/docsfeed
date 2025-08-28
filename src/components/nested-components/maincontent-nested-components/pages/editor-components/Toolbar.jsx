@@ -140,7 +140,7 @@ export default function EditorToolbar({
           }`}
         >
           <Send className={`w-4 h-4 ${isPublishing ? "animate-pulse" : ""}`} />
-          {data && <span>Update</span>}
+          {data && <span>{isPublishing ? "Updating.." : "Update"}</span>}
           {!data && (
             <span className="font-medium">
               {isPublishing ? "Publishing..." : "Publish"}

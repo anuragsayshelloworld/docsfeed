@@ -10,6 +10,8 @@ import {
   doc,
   where,
   getDoc,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 // Your Firebase configuration
@@ -108,3 +110,37 @@ export async function UserLogin(username) {
     return true;
   }
 }
+
+/**
+ * Delete a document from Firestore by its ID.
+ * @param {string} id - Firestore document ID to delete.
+ * @returns {Promise<void>}
+ */
+export const deleteDocument = async (id) => {
+  try {
+    const docRef = doc(db, "documents", id);
+    await deleteDoc(docRef);
+    console.log(`Document with ID "${id}" deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting document with ID "${id}":`, error);
+  }
+};
+
+/**
+ * Update a document in Firestore by its ID.
+ * @param {string} id - Firestore document ID to update.
+ * @param {Object} data - Fields to update in the document.
+ * @returns {Promise<void>}
+ */
+export const updateDocument = async (id, data) => {
+  try {
+    const docRef = doc(db, "documents", id);
+    await updateDoc(docRef, {
+      ...data,
+      savedAt: new Date(), // optionally update the timestamp
+    });
+    console.log(`Document with ID "${id}" updated successfully.`);
+  } catch (error) {
+    console.error(`Error updating document with ID "${id}":`, error);
+  }
+};

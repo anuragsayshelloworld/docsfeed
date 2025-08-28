@@ -1,15 +1,18 @@
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import "../../../../firebase.js";
-import { saveToFirebase } from "../../../../firebase.js";
+import { saveToFirebase, updateDocument } from "../../../../firebase.js";
 import EditorToolbar from "./editor-components/Toolbar.jsx";
 import TitleInput from "./editor-components/TitleInput.jsx";
 import "../../../../css/editor.css";
 import { useState, useEffect, useContext } from "react";
 import EditorContentWrapper from "./editor-components/EditorArea.jsx";
 import ModeContext from "../../../../context/ModeContext.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Editor() {
+  const documentId = useLocation().state;
+  const navigate = useNavigate();
   const { data, title: contextTitle, mode, setMode } = useContext(ModeContext);
   const [, setRefresh] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -42,8 +45,17 @@ export default function Editor() {
   }
 
   async function update() {
-    console.log("Update function called");
-    // Update logic here later
+    setIsPublishing(true);
+    if (!documentId) return;
+
+    const content = workSpace.getHTML();
+
+    await updateDocument(documentId, {
+      title: currentTitle,
+      html: content,
+    });
+    setIsPublishing(false);
+    navigate("/");
   }
 
   useEffect(() => {
