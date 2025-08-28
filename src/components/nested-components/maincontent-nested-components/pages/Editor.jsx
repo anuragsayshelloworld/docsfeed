@@ -10,10 +10,12 @@ import EditorContentWrapper from "./editor-components/EditorArea.jsx";
 import ModeContext from "../../../../context/ModeContext.jsx";
 
 export default function Editor() {
-  const { data, title: contextTitle, mode } = useContext(ModeContext);
+  const { data, title: contextTitle, mode, setMode } = useContext(ModeContext);
   const [, setRefresh] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState("");
+  const [currentTitle, setCurrentTitle] = useState(
+    mode === "edit" ? contextTitle : ""
+  );
   const [wordCount, setWordCount] = useState(0);
 
   const workSpace = useEditor({
@@ -57,14 +59,14 @@ export default function Editor() {
     };
   }, [workSpace]);
 
+  //dont touch this useffect! never! its a petty hack!
   useEffect(() => {
-    // Only bind title if in edit mode
-    if (mode === "edit" && contextTitle) {
-      setCurrentTitle(contextTitle);
-    } else {
-      setCurrentTitle(""); // Fresh start for create mode
-    }
-  }, [mode, contextTitle]);
+    return () => {
+      if (!window.location.pathname.includes("/editor/edit")) {
+        setMode("");
+      }
+    };
+  }, [setMode]);
 
   useEffect(() => {
     // Only bind content if in edit mode

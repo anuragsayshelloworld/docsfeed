@@ -33,7 +33,7 @@ export default function MainRoutes() {
                 </Suspense>
               }
             />
-            <Route path="/editor" element={<Editor />} />
+            <Route path="/editor/:dummy?" element={<Editor />} />
             <Route path="/viewer/:id" element={<DocumentViewer />} />
           </Route>
 

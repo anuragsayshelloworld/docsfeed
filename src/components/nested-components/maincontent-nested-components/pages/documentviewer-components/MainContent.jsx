@@ -49,7 +49,7 @@ export default function MainContent({ doc, isLoading }) {
     setMode("edit");
     setTitle(doc.title);
     setData(doc.html);
-    navigate("/editor");
+    navigate(`/editor/edit`);
   }
 
   return (

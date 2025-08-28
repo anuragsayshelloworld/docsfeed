@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../context/ModeContext";
 export default function SidebarItem({ label, expanded, tooltip }) {
   const navigate = useNavigate();
-  const { setData } = useContext(ModeContext);
+  const { setData, setMode } = useContext(ModeContext);
   function handleNavigate() {
+    setMode("");
     setData(null);
     navigate("/editor");
   }
