@@ -4,8 +4,12 @@ export default ModeContext;
 
 export function ModeProvider({ children }) {
   const [data, setData] = useState(null);
+  const [title, setTitle] = useState("");
+  const [mode, setMode] = useState("");
   return (
-    <ModeContext.Provider value={{ data, setData }}>
+    <ModeContext.Provider
+      value={{ mode, setMode, data, setData, title, setTitle }}
+    >
       {children}
     </ModeContext.Provider>
   );

@@ -10,15 +10,15 @@ import EditorContentWrapper from "./editor-components/EditorArea.jsx";
 import ModeContext from "../../../../context/ModeContext.jsx";
 
 export default function Editor() {
-  const { data } = useContext(ModeContext);
+  const { data, title: contextTitle, mode } = useContext(ModeContext);
   const [, setRefresh] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
-  const [title, setTitle] = useState("");
+  const [currentTitle, setCurrentTitle] = useState("");
   const [wordCount, setWordCount] = useState(0);
 
   const workSpace = useEditor({
     extensions: [StarterKit],
-    content: data || "",
+    content: "",
     onUpdate: ({ editor }) => {
       const text = editor.getText();
       setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
@@ -29,7 +29,7 @@ export default function Editor() {
     setIsPublishing(true);
     try {
       const content = workSpace.getHTML();
-      await saveToFirebase({ title, content });
+      await saveToFirebase({ Title: currentTitle, content });
       // Success handling here later
     } catch (error) {
       console.error("Publishing failed:", error);
@@ -37,6 +37,11 @@ export default function Editor() {
     } finally {
       setIsPublishing(false);
     }
+  }
+
+  async function update() {
+    console.log("Update function called");
+    // Update logic here later
   }
 
   useEffect(() => {
@@ -53,30 +58,41 @@ export default function Editor() {
   }, [workSpace]);
 
   useEffect(() => {
-    //worsSpace.getHttml le current html content bhitra j chha tyo dinchha..
-    // compares with new data or "" (its always null via context)
-    if (workSpace && workSpace.getHTML() !== (data || "")) {
-      workSpace.commands.setContent(data || "");
+    // Only bind title if in edit mode
+    if (mode === "edit" && contextTitle) {
+      setCurrentTitle(contextTitle);
+    } else {
+      setCurrentTitle(""); // Fresh start for create mode
     }
-  }, [data, workSpace]);
+  }, [mode, contextTitle]);
+
+  useEffect(() => {
+    // Only bind content if in edit mode
+    if (mode === "edit" && workSpace && data) {
+      workSpace.commands.setContent(data);
+    } else if (workSpace) {
+      workSpace.commands.setContent(""); // Fresh start for create mode
+    }
+  }, [mode, data, workSpace]);
 
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+    setCurrentTitle(e.target.value);
   };
 
   if (!workSpace) return null;
 
   return (
     <div className="p-4 w-full max-w-6xl mx-auto h-[93vh] flex flex-col">
-      <TitleInput title={title} onTitleChange={handleTitleChange} />
+      <TitleInput title={currentTitle} onTitleChange={handleTitleChange} />
 
       <EditorToolbar
         data={data}
         workSpace={workSpace}
-        onPublish={publish}
+        onPublish={mode === "edit" ? update : publish}
         isPublishing={isPublishing}
-        title={title}
+        title={currentTitle}
         wordCount={wordCount}
+        mode={mode}
       />
 
       <EditorContentWrapper workSpace={workSpace} />

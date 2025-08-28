@@ -10,7 +10,7 @@ import ModeContext from "../../../../../context/ModeContext";
 export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
   const navigate = useNavigate();
-  const { setData } = useContext(ModeContext);
+  const { setData, setTitle, setMode } = useContext(ModeContext);
 
   if (isLoading) {
     return (
@@ -46,6 +46,8 @@ export default function MainContent({ doc, isLoading }) {
     //setMode("edit");
     // use set mode for the publish or update
     //setTitle also require to do titile
+    setMode("edit");
+    setTitle(doc.title);
     setData(doc.html);
     navigate("/editor");
   }
