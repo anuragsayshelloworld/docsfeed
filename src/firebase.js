@@ -36,17 +36,18 @@ const db = getFirestore(app);
  * @param {string} data.title - The title of the document.
  * @param {string} data.content - The HTML content to save.
  */
-export const saveToFirebase = async ({ title, content }) => {
+export const saveToFirebase = async ({ title, html }) => {
   try {
-    console.log("Saving to Firebase:", { title, content });
+    console.log("Saving to Firebase:", { title, html });
 
     const docRef = await addDoc(collection(db, "documents"), {
       title,
-      html: content,
+      html,
       savedAt: new Date(),
     });
 
     console.log("Saved to Firebase with ID:", docRef.id);
+    return docRef.id;
   } catch (error) {
     console.error("Error saving document:", error);
   }

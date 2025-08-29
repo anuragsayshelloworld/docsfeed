@@ -30,15 +30,23 @@ export default function Editor() {
     },
   });
 
+  // ✅ Keep currentTitle in sync with context
+  useEffect(() => {
+    if (mode === "edit") {
+      setCurrentTitle(contextTitle || "");
+    } else {
+      setCurrentTitle("");
+    }
+  }, [mode, contextTitle]);
+
   async function publish() {
     setIsPublishing(true);
     try {
       const content = workSpace.getHTML();
-      await saveToFirebase({ Title: currentTitle, content });
-      // Success handling here later
+      await saveToFirebase({ title: currentTitle, html: content }); // ✅ unified schema
+      navigate("/");
     } catch (error) {
       console.error("Publishing failed:", error);
-      // Error handling here later
     } finally {
       setIsPublishing(false);
     }
@@ -48,14 +56,18 @@ export default function Editor() {
     setIsPublishing(true);
     if (!documentId) return;
 
-    const content = workSpace.getHTML();
-
-    await updateDocument(documentId, {
-      title: currentTitle,
-      html: content,
-    });
-    setIsPublishing(false);
-    navigate("/");
+    try {
+      const content = workSpace.getHTML();
+      await updateDocument(documentId, {
+        title: currentTitle,
+        html: content,
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Update failed:", error);
+    } finally {
+      setIsPublishing(false);
+    }
   }
 
   useEffect(() => {
@@ -71,7 +83,7 @@ export default function Editor() {
     };
   }, [workSpace]);
 
-  //dont touch this useffect! never! its a petty hack!
+  // dont touch this useEffect! never! its a petty hack!
   useEffect(() => {
     return () => {
       if (!window.location.pathname.includes("/editor/edit")) {
@@ -80,12 +92,14 @@ export default function Editor() {
     };
   }, [setMode]);
 
+  // Load existing content only in edit mode
   useEffect(() => {
-    // Only bind content if in edit mode
-    if (mode === "edit" && workSpace && data) {
+    if (!workSpace) return;
+
+    if (mode === "edit" && data) {
       workSpace.commands.setContent(data);
-    } else if (workSpace) {
-      workSpace.commands.setContent(""); // Fresh start for create mode
+    } else {
+      workSpace.commands.setContent(""); // fresh start
     }
   }, [mode, data, workSpace]);
 
