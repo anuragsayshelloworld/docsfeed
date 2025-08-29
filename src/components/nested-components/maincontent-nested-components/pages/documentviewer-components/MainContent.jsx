@@ -11,6 +11,7 @@ import { deleteDocument } from "../../../../../firebase";
 export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
   const navigate = useNavigate();
+  const role = JSON.parse(localStorage.getItem("auth")).role;
   const { setData, setTitle, setMode } = useContext(ModeContext);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -67,20 +68,25 @@ export default function MainContent({ doc, isLoading }) {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">{doc.title}</h1>
           <div className="flex gap-2">
-            <button
-              onClick={handleNavigate}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm"
-            >
-              <Edit className="w-4 h-4" />
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm"
-            >
-              <Trash2 className="w-4 h-4" />
-              Delete
-            </button>
+            {role === 1 && (
+              <>
+                <button
+                  onClick={handleNavigate}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm"
+                >
+                  <Edit className="w-4 h-4" />
+                  Edit
+                </button>
+
+                <button
+                  onClick={handleDelete}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </>
+            )}
           </div>
         </div>
         <div className="innerDoc z-10">

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import {UserLogin} from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { UserLogin } from "../firebase";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,17 +11,18 @@ export default function Login() {
     error: "",
   });
 
+  const navigate = useNavigate();
+
   async function handleLogin(e) {
     e.preventDefault();
     const { username, password } = formData;
 
-    setFormData((prev) => ({ ...prev, isLoggingIn: true }));
+    setFormData((prev) => ({ ...prev, isLoggingIn: true, error: "" }));
 
     const usernameTrimmed = username.trim();
     const passwordTrimmed = password.trim();
 
     const isValid = validateCredentials(usernameTrimmed, passwordTrimmed);
-
     if (!isValid.valid) {
       setFormData((prev) => ({
         ...prev,
@@ -28,10 +30,36 @@ export default function Login() {
         isLoggingIn: false,
       }));
       return;
-    } else {
-      const response = await UserLogin(usernameTrimmed);
-      console.log(response);
-      setFormData((prev) => ({ ...prev, isLoggingIn: false }));
+    }
+
+    try {
+      const response = await UserLogin(usernameTrimmed, passwordTrimmed);
+
+      if (response.success) {
+        // Save ONE unified object in localStorage
+        const authObject = {
+          userId: response.user.id,
+          role: response.user.role,
+          timestamp: Date.now(),
+        };
+
+        localStorage.setItem("auth", JSON.stringify(authObject));
+
+        setFormData((prev) => ({ ...prev, isLoggingIn: false }));
+        navigate("/", { replace: true });
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          error: response.message || "Invalid credentials",
+          isLoggingIn: false,
+        }));
+      }
+    } catch {
+      setFormData((prev) => ({
+        ...prev,
+        error: "Network error. Please try again.",
+        isLoggingIn: false,
+      }));
     }
   }
 
@@ -39,18 +67,15 @@ export default function Login() {
     if (!username || !password) {
       return { valid: false, message: "Username and password are required" };
     }
-
-    if (username.length < 5 || username.length > 20) {
-      return { valid: false, message: "Username must be 5–20 characters long" };
+    if (username.length < 3 || username.length > 20) {
+      return { valid: false, message: "Username must be 3-20 characters" };
     }
-
     if (password.length < 6) {
       return {
         valid: false,
         message: "Password must be at least 6 characters",
       };
     }
-
     return { valid: true, message: "" };
   }
 
@@ -63,7 +88,7 @@ export default function Login() {
             <p className="text-gray-500 text-xs">Access your account</p>
           </div>
 
-          {/* Smooth error transition */}
+          {/* Error message */}
           <div
             aria-live="polite"
             className={`transition-all duration-500 ease-in-out overflow-hidden mb-4 ${
@@ -78,52 +103,37 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                id="username"
-                minLength={5}
-                maxLength={20}
-                autoComplete="username"
-                value={formData.username}
-                onChange={(event) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    username: event.target.value,
-                    error: "",
-                  }))
-                }
-                type="text"
-                placeholder="Username"
-                disabled={formData.isLoggingIn}
-                className="w-full px-3 py-2.5 rounded-lg border border-gray-400 bg-gray-50 text-gray-950 text-sm placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-            </div>
+            <input
+              id="username"
+              value={formData.username}
+              onChange={(event) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  username: event.target.value,
+                  error: "",
+                }))
+              }
+              type="text"
+              placeholder="Username"
+              disabled={formData.isLoggingIn}
+              className="w-full px-3 py-2.5 rounded-lg border border-gray-400 bg-gray-50 text-sm"
+            />
 
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                minLength={6}
-                autoComplete="current-password"
-                value={formData.password}
-                onChange={(event) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    password: event.target.value,
-                    error: "",
-                  }))
-                }
-                type={formData.showPassword ? "text" : "password"}
-                placeholder="Password"
-                disabled={formData.isLoggingIn}
-                className="w-full px-3 py-2.5 rounded-lg border border-gray-400 bg-gray-50 text-gray-950 text-sm placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-            </div>
+            <input
+              id="password"
+              value={formData.password}
+              onChange={(event) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  password: event.target.value,
+                  error: "",
+                }))
+              }
+              type={formData.showPassword ? "text" : "password"}
+              placeholder="Password"
+              disabled={formData.isLoggingIn}
+              className="w-full px-3 py-2.5 rounded-lg border border-gray-400 bg-gray-50 text-sm"
+            />
 
             <div className="flex items-center gap-2 py-1">
               <input
@@ -137,7 +147,6 @@ export default function Login() {
                   }))
                 }
                 disabled={formData.isLoggingIn}
-                className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
               />
               <label htmlFor="showPassword" className="text-sm text-gray-700">
                 Show password
@@ -147,34 +156,9 @@ export default function Login() {
             <button
               type="submit"
               disabled={formData.isLoggingIn}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900 mt-6"
+              className="w-full bg-gray-900 text-white py-2.5 rounded-lg"
             >
-              {formData.isLoggingIn ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Signing In...
-                </span>
-              ) : (
-                "Sign In"
-              )}
+              {formData.isLoggingIn ? "Signing In..." : "Sign In"}
             </button>
           </form>
         </div>

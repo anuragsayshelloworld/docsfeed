@@ -99,16 +99,51 @@ export const fetchDocumentById = async (id) => {
   }
 };
 
-export async function UserLogin(username) {
-  const credentialRef = collection(db, "credentials");
-  const q = query(credentialRef, where("username", "==", username));
-  const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) {
-    return false;
-  } else {
-    // check for password!
-    console.log(querySnapshot);
-    return true;
+export async function UserLogin(username, password) {
+  try {
+    const credentialRef = collection(db, "credentials");
+    const q = query(credentialRef, where("username", "==", username));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+        user: null,
+      };
+    }
+
+    // Get the first (should be only) matching user
+    const userDoc = querySnapshot.docs[0];
+    const userData = userDoc.data();
+
+    // Check password
+    if (userData.password !== password) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+        user: null,
+      };
+    }
+
+    // Return success with user data (excluding password for security)
+    return {
+      success: true,
+      message: "Login successful",
+      user: {
+        id: userDoc.id,
+        username: userData.username,
+        role: userData.role,
+      },
+      userId: userDoc.id,
+    };
+  } catch (error) {
+    console.error("Error during login:", error);
+    return {
+      success: false,
+      message: "Login failed. Please try again.",
+      user: null,
+    };
   }
 }
 
