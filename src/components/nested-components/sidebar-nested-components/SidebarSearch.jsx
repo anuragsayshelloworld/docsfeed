@@ -1,11 +1,16 @@
 import { Search as SearchIcon } from "lucide-react";
-export default function SidebarSearch({ expanded }) {
+export default function SidebarSearch({ expanded, expandWhenCollapsed }) {
   return (
     <div
-      className={`flex items-center p-3 m-2 h-10 rounded-lg group hover:bg-gray-200 transition 
+      className={`cursor-pointer flex items-center p-3 m-2 h-10 rounded-lg group hover:bg-gray-200 transition 
       ${expanded ? "justify-start" : "justify-center"}`}
-      title={!expanded ? "Search" : undefined}
+      title="Search"
       aria-label="Search"
+      onClick={() => {
+        if (!expanded) {
+          expandWhenCollapsed();
+        }
+      }}
     >
       <SearchIcon
         className="text-gray-500 group-hover:text-black transition duration-300"

@@ -2,7 +2,7 @@ import { Plus } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../context/ModeContext";
-export default function SidebarItem({ label, expanded, tooltip }) {
+export default function SidebarItem({ label, expanded }) {
   const navigate = useNavigate();
   const { setData, setMode } = useContext(ModeContext);
   function handleNavigate() {
@@ -15,8 +15,8 @@ export default function SidebarItem({ label, expanded, tooltip }) {
       onClick={handleNavigate}
       className={`flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group cursor-pointer 
       ${expanded ? "justify-start" : "justify-center"}`}
-      title={!expanded ? tooltip : undefined}
-      aria-label={tooltip}
+      title="New Document"
+      aria-label="new document"
     >
       <Plus className="text-gray-500 group-hover:text-black" size={20} />
       <span

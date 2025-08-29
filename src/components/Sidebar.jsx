@@ -31,12 +31,11 @@ export default function Sidebar() {
           expanded={expandSidebar}
           onToggle={() => setExpandSideBar(!expandSidebar)}
         />
-        <SidebarItem
-          label="Create New"
+        <SidebarItem label="Create New" expanded={expandSidebar} />
+        <SidebarSearch
           expanded={expandSidebar}
-          tooltip="New Note"
+          expandWhenCollapsed={() => setExpandSideBar(true)}
         />
-        <SidebarSearch expanded={expandSidebar} />
         <SidebarList expanded={expandSidebar} />
       </div>
 

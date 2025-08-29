@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 export default function SidebarLogo({ expanded }) {
   return (
-    <div className="flex items-center px-5 py-4 transition-all duration-300">
+    <div
+      className="flex items-center px-5 py-4 transition-all duration-300"
+      title="Home"
+    >
       <Link
         to="/"
         className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors duration-200"

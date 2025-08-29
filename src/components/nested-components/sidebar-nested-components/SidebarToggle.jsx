@@ -4,7 +4,7 @@ export default function SidebarToggle({ expanded, onToggle }) {
     <button
       onClick={onToggle}
       className="flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group"
-      title="Toggle sidebar"
+      title={expanded ? "Collapse" : "Expand"}
       aria-label="Toggle sidebar"
     >
       <PanelLeft className="text-gray-500 group-hover:text-black" size={20} />
