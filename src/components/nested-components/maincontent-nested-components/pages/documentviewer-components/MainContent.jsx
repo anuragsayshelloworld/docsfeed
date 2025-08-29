@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import parse from "html-react-parser";
 import { FileText, Edit, Trash2 } from "lucide-react";
 import LoaderSpinner from "../../../../../LoaderSpinner";
@@ -12,6 +12,8 @@ export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
   const navigate = useNavigate();
   const { setData, setTitle, setMode } = useContext(ModeContext);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (isLoading) {
     return (
@@ -44,15 +46,17 @@ export default function MainContent({ doc, isLoading }) {
   };
 
   function handleNavigate() {
-    //setMode("edit");
-    // use set mode for the publish or update
-    //setTitle also require to do titile
     setMode("edit");
     setTitle(doc.title);
     setData(doc.html);
     navigate(`/editor/edit`, { state: doc.id });
   }
   async function handleDelete() {
+    setShowDeleteConfirm(true);
+  }
+
+  async function confirmDelete() {
+    setIsDeleting(true);
     await deleteDocument(doc.id);
     navigate("/");
   }
@@ -83,6 +87,33 @@ export default function MainContent({ doc, isLoading }) {
           {parse(doc.html, { replace: transform })}
         </div>
       </div>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Delete Document</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this document? This action cannot
+              be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={isDeleting}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

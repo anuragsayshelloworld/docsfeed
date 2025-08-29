@@ -10,6 +10,32 @@ import EditorContentWrapper from "./editor-components/EditorArea.jsx";
 import ModeContext from "../../../../context/ModeContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
+// Simple notification component
+function Notification({ message, type, onClose }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const bgColor =
+    type === "error"
+      ? "bg-red-100 border-red-400 text-red-700"
+      : "bg-yellow-100 border-yellow-400 text-yellow-700";
+
+  return (
+    <div
+      className={`fixed top-4 right-4 p-3 border rounded shadow-lg z-50 ${bgColor}`}
+    >
+      <div className="flex items-center justify-between">
+        <span>{message}</span>
+        <button onClick={onClose} className="ml-3 text-lg">
+          &times;
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Editor() {
   const documentId = useLocation().state;
   const navigate = useNavigate();
@@ -20,6 +46,7 @@ export default function Editor() {
     mode === "edit" ? contextTitle : ""
   );
   const [wordCount, setWordCount] = useState(0);
+  const [notification, setNotification] = useState(null);
 
   const workSpace = useEditor({
     extensions: [StarterKit],
@@ -30,7 +57,14 @@ export default function Editor() {
     },
   });
 
-  // ✅ Keep currentTitle in sync with context
+  const showNotification = (message, type = "warning") => {
+    setNotification({ message, type });
+  };
+
+  const closeNotification = () => {
+    setNotification(null);
+  };
+
   useEffect(() => {
     if (mode === "edit") {
       setCurrentTitle(contextTitle || "");
@@ -40,19 +74,30 @@ export default function Editor() {
   }, [mode, contextTitle]);
 
   async function publish() {
+    if (!currentTitle.trim() || wordCount === 0) {
+      showNotification("⚠️ Cannot publish empty document.");
+      return;
+    }
+
     setIsPublishing(true);
     try {
       const content = workSpace.getHTML();
-      await saveToFirebase({ title: currentTitle, html: content }); // ✅ unified schema
+      await saveToFirebase({ title: currentTitle, html: content });
       navigate("/");
     } catch (error) {
       console.error("Publishing failed:", error);
+      showNotification("❌ Failed to publish. Please try again.", "error");
     } finally {
       setIsPublishing(false);
     }
   }
 
   async function update() {
+    if (!currentTitle.trim() || wordCount === 0) {
+      showNotification("⚠️ Cannot update empty document.");
+      return;
+    }
+
     setIsPublishing(true);
     if (!documentId) return;
 
@@ -65,6 +110,7 @@ export default function Editor() {
       navigate("/");
     } catch (error) {
       console.error("Update failed:", error);
+      showNotification("❌ Failed to update. Please try again.", "error");
     } finally {
       setIsPublishing(false);
     }
@@ -111,6 +157,14 @@ export default function Editor() {
 
   return (
     <div className="p-4 w-full max-w-6xl mx-auto h-[93vh] flex flex-col">
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={closeNotification}
+        />
+      )}
+
       <TitleInput title={currentTitle} onTitleChange={handleTitleChange} />
 
       <EditorToolbar
