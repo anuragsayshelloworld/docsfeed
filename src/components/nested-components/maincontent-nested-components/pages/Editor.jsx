@@ -37,6 +37,7 @@ function Notification({ message, type, onClose }) {
 }
 
 export default function Editor() {
+  const currentUser = JSON.parse(localStorage.getItem("auth"));
   const documentId = useLocation().state;
   const navigate = useNavigate();
   const { data, title: contextTitle, mode, setMode } = useContext(ModeContext);
@@ -82,7 +83,11 @@ export default function Editor() {
     setIsPublishing(true);
     try {
       const content = workSpace.getHTML();
-      await saveToFirebase({ title: currentTitle, html: content });
+      await saveToFirebase({
+        title: currentTitle,
+        html: content,
+        author: currentUser.username,
+      });
       navigate("/");
     } catch (error) {
       console.error("Publishing failed:", error);

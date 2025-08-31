@@ -28,7 +28,7 @@ const DocumentItem = React.memo(function DocumentItem({ doc }) {
           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
             <div className="flex items-center gap-1">
               <User className="w-4 h-4" />
-              <span>Unknown</span>
+              <span>{doc.author}</span>
             </div>
             <div className="hidden md:flex items-center gap-1">
               <Calendar className="w-4 h-4" />

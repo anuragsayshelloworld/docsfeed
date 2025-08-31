@@ -39,6 +39,7 @@ export default function Login() {
         // Save ONE unified object in localStorage
         const authObject = {
           userId: response.user.id,
+          username: response.user.username,
           role: response.user.role,
           timestamp: Date.now(),
         };
