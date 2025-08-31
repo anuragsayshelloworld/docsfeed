@@ -33,22 +33,22 @@ export default function Projects({ expanded }) {
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            max-height: 0;
-          }
-          to {
-            opacity: 1;
-            max-height: 200px;
-          }
-        }
+      <style>{`
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      max-height: 0;
+    }
+    to {
+      opacity: 1;
+      max-height: 200px;
+    }
+  }
 
-        .animate-slideIn {
-          animation: slideIn 0.3s ease-out;
-        }
-      `}</style>
+  .animate-slideIn {
+    animation: slideIn 0.3s ease-out;
+  }
+`}</style>
     </>
   );
 }
