@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LogOut, Settings, HelpCircle } from "lucide-react";
 
-export default function SidebarUser({ expanded, avatarUrl }) {
+export default function SidebarUser({ expanded }) {
   const [logoutSlider, setLogoutSlider] = useState(false);
   const user = JSON.parse(localStorage.getItem("auth"));
 
@@ -16,7 +16,7 @@ export default function SidebarUser({ expanded, avatarUrl }) {
         aria-label={`${user.username}'s image`}
       >
         <img
-          src={avatarUrl}
+          src={user.image ? user.image : "/avatar.png"}
           alt={`${user.username}'s image`}
           className="rounded-full w-10 h-10"
         />

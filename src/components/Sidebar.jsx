@@ -39,10 +39,7 @@ export default function Sidebar() {
         <SidebarList expanded={expandSidebar} />
       </div>
 
-      <SidebarUser
-        expanded={expandSidebar}
-        avatarUrl="https://i.pravatar.cc/40"
-      />
+      <SidebarUser expanded={expandSidebar} />
     </aside>
   );
 }

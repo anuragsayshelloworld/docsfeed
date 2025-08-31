@@ -30,8 +30,8 @@ export default function SidebarList({ expanded }) {
       className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 
       ${expanded ? "opacity-100" : "opacity-0 max-h-0"}`}
     >
-      <div className="px-6 pt-4 pb-1 text-xs font-semibold text-gray-500 uppercase">
-        Notes
+      <div className="px-6 pt-4 pb-2 text-xs font-semibold text-gray-500 uppercase">
+        My Documents
       </div>
 
       <div className="space-y-1 px-2 pb-2 pr-1 overflow-y-auto flex-1 scrollbar-hide">

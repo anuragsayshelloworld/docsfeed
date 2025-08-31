@@ -16,7 +16,7 @@ export default function SidebarItem({ label, expanded }) {
       className={`flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group cursor-pointer 
       ${expanded ? "justify-start" : "justify-center"}`}
       title="New Document"
-      aria-label="new document"
+      aria-label="New Document"
     >
       <Plus className="text-gray-500 group-hover:text-black" size={20} />
       <span
