@@ -1,8 +1,11 @@
 import { FolderPlus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateProject({ expanded }) {
+  const navigate = useNavigate();
   return (
     <div
+      onClick={() => navigate("/create")}
       className={`flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group cursor-pointer 
       ${expanded ? "justify-start" : "justify-center"}`}
       title="Create Project"

@@ -5,6 +5,7 @@ import ProtectedRoute from "../infrastructures/ProtectedRoute";
 import LoaderSpinner from "../LoaderSpinner";
 import Login from "../pages/Login";
 import { ModeProvider } from "../context/ModeContext";
+import ProjectCreation from "../components/nested-components/maincontent-nested-components/pages/ProjectCreation";
 
 const Documentation = lazy(() =>
   import(
@@ -56,6 +57,14 @@ export default function MainRoutes() {
               element={
                 <Suspense fallback={<LoaderSpinner />}>
                   <DocumentViewer />
+                </Suspense>
+              }
+            />
+            <Route
+              path="create"
+              element={
+                <Suspense fallback={<LoaderSpinner />}>
+                  <ProjectCreation />
                 </Suspense>
               }
             />
