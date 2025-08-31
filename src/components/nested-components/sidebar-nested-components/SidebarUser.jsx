@@ -30,7 +30,7 @@ export default function SidebarUser({ expanded }) {
               {user.username}
             </span>
             <span className="text-xs text-gray-500 truncate">
-              {user.userId}
+              {user.role === 1 ? "Administrator" : "Collaborator"}
             </span>
           </div>
         </div>
@@ -51,7 +51,6 @@ export default function SidebarUser({ expanded }) {
             e.stopPropagation();
             localStorage.removeItem("auth");
             window.location.href = "/";
-            setLogoutSlider(false);
           }}
           className="w-full p-3 text-sm text-red-600 hover:bg-red-50 rounded-t-lg transition-colors flex items-center gap-2"
         >
@@ -87,7 +86,7 @@ export default function SidebarUser({ expanded }) {
       {/* Backdrop to close slider */}
       {logoutSlider && (
         <div
-          className="fixed inset-0 z-[-1]"
+          className="fixed inset-0 z-[10]"
           onClick={() => setLogoutSlider(false)}
         />
       )}

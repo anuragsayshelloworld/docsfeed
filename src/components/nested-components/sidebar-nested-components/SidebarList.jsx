@@ -1,5 +1,6 @@
 import { MoreVertical } from "lucide-react";
-export default function SidebarList({ expanded }) {
+import React from "react";
+function SidebarList({ expanded }) {
   const items = [
     "Frontend Interview Prep",
     "Claude vs GPT",
@@ -48,3 +49,4 @@ export default function SidebarList({ expanded }) {
     </div>
   );
 }
+export default React.memo(SidebarList);

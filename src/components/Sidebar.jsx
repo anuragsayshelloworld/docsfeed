@@ -31,7 +31,7 @@ export default function Sidebar() {
           expanded={expandSidebar}
           onToggle={() => setExpandSideBar(!expandSidebar)}
         />
-        <SidebarItem label="Create New" expanded={expandSidebar} />
+        <SidebarItem expanded={expandSidebar} />
         <SidebarSearch
           expanded={expandSidebar}
           expandWhenCollapsed={() => setExpandSideBar(true)}

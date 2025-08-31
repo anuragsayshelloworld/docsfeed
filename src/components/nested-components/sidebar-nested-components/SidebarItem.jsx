@@ -1,15 +1,16 @@
 import { Plus } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../context/ModeContext";
-export default function SidebarItem({ label, expanded }) {
+export default function SidebarItem({ expanded }) {
   const navigate = useNavigate();
   const { setData, setMode } = useContext(ModeContext);
-  function handleNavigate() {
+  const handleNavigate = useCallback(() => {
     setMode("");
     setData(null);
     navigate("/editor");
-  }
+  }, [setMode, setData, navigate]);
+
   return (
     <div
       onClick={handleNavigate}
@@ -23,7 +24,7 @@ export default function SidebarItem({ label, expanded }) {
         className={`ml-2 text-sm font-medium text-gray-600 transition-all duration-300 whitespace-nowrap 
         ${expanded ? "opacity-100" : "opacity-0 w-0 overflow-hidden"}`}
       >
-        {label}
+        Create new
       </span>
     </div>
   );

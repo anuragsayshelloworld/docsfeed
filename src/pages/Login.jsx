@@ -157,7 +157,9 @@ export default function Login() {
             <button
               type="submit"
               disabled={formData.isLoggingIn}
-              className="w-full bg-gray-900 text-white py-2.5 rounded-lg"
+              className={`w-full bg-gray-900 text-white py-2.5 rounded-lg ${
+                formData.isLoggingIn ? "cursor-not-allowed" : ""
+              }`}
             >
               {formData.isLoggingIn ? "Signing In..." : "Sign In"}
             </button>
