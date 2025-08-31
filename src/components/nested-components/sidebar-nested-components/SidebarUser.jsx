@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { LogOut, Settings, HelpCircle } from "lucide-react";
-
+import useLocalstorage from "../../../hooks/useLocalStorage";
 export default function SidebarUser({ expanded }) {
   const [logoutSlider, setLogoutSlider] = useState(false);
-  const user = JSON.parse(localStorage.getItem("auth"));
+  const { value: auth } = useLocalstorage("auth");
 
   return (
     <div className="relative">
@@ -12,12 +12,12 @@ export default function SidebarUser({ expanded }) {
         onClick={() => setLogoutSlider(() => !logoutSlider)}
         className={`flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100 transition
         ${expanded ? "justify-start" : "justify-center"}`}
-        title={`${user.username}'s image`}
-        aria-label={`${user.username}'s image`}
+        title={`${auth.username}'s image`}
+        aria-label={`${auth.username}'s image`}
       >
         <img
-          src={user.image ? user.image : "/avatar.png"}
-          alt={`${user.username}'s image`}
+          src={auth.image ? auth.image : "/avatar.png"}
+          alt={`${auth.username}'s image`}
           className="rounded-full w-10 h-10"
         />
 
@@ -27,10 +27,10 @@ export default function SidebarUser({ expanded }) {
         >
           <div className="flex flex-col">
             <span className="text-sm font-semibold truncate text-gray-800">
-              {user.username}
+              {auth.username}
             </span>
             <span className="text-xs text-gray-500 truncate">
-              {user.role === 1 ? "Administrator" : "Collaborator"}
+              {auth.role === 1 ? "Administrator" : "Collaborator"}
             </span>
           </div>
         </div>

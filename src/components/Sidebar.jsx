@@ -6,6 +6,7 @@ import SidebarSearch from "./nested-components/sidebar-nested-components/Sidebar
 import useMobile from "../hooks/useMobile";
 import SidebarLogo from "./nested-components/sidebar-nested-components/SidebarLogo";
 import CreateProject from "./nested-components/sidebar-nested-components/CreateProject";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const SidebarList = lazy(() =>
   import("./nested-components/sidebar-nested-components/SidebarList")
@@ -14,6 +15,7 @@ const SidebarList = lazy(() =>
 export default function Sidebar() {
   const isMobile = useMobile(756);
   const [expandSidebar, setExpandSideBar] = useState(true);
+  const { value: auth } = useLocalStorage("auth");
 
   useEffect(() => {
     if (isMobile) {
@@ -33,7 +35,8 @@ export default function Sidebar() {
           onToggle={() => setExpandSideBar(!expandSidebar)}
         />
         <SidebarItem expanded={expandSidebar} />
-        <CreateProject expanded={expandSidebar} />
+        {auth.role === 1 && <CreateProject expanded={expandSidebar} />}
+
         <SidebarSearch
           expanded={expandSidebar}
           expandWhenCollapsed={() => setExpandSideBar(true)}

@@ -9,6 +9,7 @@ import { useState, useEffect, useContext } from "react";
 import EditorContentWrapper from "./editor-components/EditorArea.jsx";
 import ModeContext from "../../../../context/ModeContext.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import useLocalstorage from "../../../../hooks/useLocalStorage.js";
 
 // Simple notification component
 function Notification({ message, type, onClose }) {
@@ -37,7 +38,7 @@ function Notification({ message, type, onClose }) {
 }
 
 export default function Editor() {
-  const currentUser = JSON.parse(localStorage.getItem("auth"));
+  const { value: currentUser } = useLocalstorage("auth");
   const documentId = useLocation().state;
   const navigate = useNavigate();
   const { data, title: contextTitle, mode, setMode } = useContext(ModeContext);

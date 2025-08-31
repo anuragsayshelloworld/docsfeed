@@ -7,11 +7,13 @@ import "../../../../../css/viewer.css";
 import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../../../context/ModeContext";
 import { deleteDocument } from "../../../../../firebase";
+import useLocalstorage from "../../../../../hooks/useLocalStorage";
 
 export default function MainContent({ doc, isLoading }) {
   const containerRef = useRef();
   const navigate = useNavigate();
-  const role = JSON.parse(localStorage.getItem("auth")).role;
+  const { value: user } = useLocalstorage("auth");
+  const role = user.role;
   const { setData, setTitle, setMode } = useContext(ModeContext);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);

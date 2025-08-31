@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserLogin } from "../firebase";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export default function Login() {
     showPassword: false,
     error: "",
   });
+  const { set: setAuth } = useLocalStorage("auth");
 
   const navigate = useNavigate();
 
@@ -36,17 +38,14 @@ export default function Login() {
       const response = await UserLogin(usernameTrimmed, passwordTrimmed);
 
       if (response.success) {
-        // Save ONE unified object in localStorage
         const authObject = {
           userId: response.user.id,
           username: response.user.username,
           role: response.user.role,
           timestamp: Date.now(),
         };
+        setAuth(authObject);
 
-        localStorage.setItem("auth", JSON.stringify(authObject));
-
-        setFormData((prev) => ({ ...prev, isLoggingIn: false }));
         navigate("/", { replace: true });
       } else {
         setFormData((prev) => ({
