@@ -1,8 +1,8 @@
 export default function ProjectCreation() {
   return (
-    <div className="h-full w-full flex justify-center items-center bg-gray-50 p-6">
-      <div className="w-full max-w-2xl">
-        <div className="bg-gray-50 rounded-2xl p-6">
+    <div className="h-full w-full flex justify-center items-center p-6">
+      <div className="w-full max-w-2xl px-16 py-6">
+        <div className="rounded-2xl p-6">
           <div className="space-y-4">
             {/* Project Name */}
             <div className="space-y-1">
