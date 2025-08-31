@@ -134,6 +134,7 @@ export default function Login() {
               placeholder="Password"
               disabled={formData.isLoggingIn}
               className="w-full px-3 py-2.5 rounded-lg border border-gray-400 bg-gray-50 text-sm"
+              autoComplete="current-password"
             />
 
             <div className="flex items-center gap-2 py-1">

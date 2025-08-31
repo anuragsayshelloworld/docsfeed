@@ -5,6 +5,7 @@ import SidebarItem from "./nested-components/sidebar-nested-components/SidebarIt
 import SidebarSearch from "./nested-components/sidebar-nested-components/SidebarSearch";
 import useMobile from "../hooks/useMobile";
 import SidebarLogo from "./nested-components/sidebar-nested-components/SidebarLogo";
+import CreateProject from "./nested-components/sidebar-nested-components/CreateProject";
 
 const SidebarList = lazy(() =>
   import("./nested-components/sidebar-nested-components/SidebarList")
@@ -32,6 +33,7 @@ export default function Sidebar() {
           onToggle={() => setExpandSideBar(!expandSidebar)}
         />
         <SidebarItem expanded={expandSidebar} />
+        <CreateProject expanded={expandSidebar} />
         <SidebarSearch
           expanded={expandSidebar}
           expandWhenCollapsed={() => setExpandSideBar(true)}
