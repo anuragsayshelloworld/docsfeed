@@ -41,8 +41,6 @@ export default function Sidebar() {
 
       <SidebarUser
         expanded={expandSidebar}
-        name="John Doe"
-        email="john.doe@example.com"
         avatarUrl="https://i.pravatar.cc/40"
       />
     </aside>
