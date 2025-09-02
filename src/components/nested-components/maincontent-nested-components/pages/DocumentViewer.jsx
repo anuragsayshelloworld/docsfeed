@@ -37,7 +37,7 @@ export default function DocumentViewer() {
 
   return (
     <div className="min-h-screen flex flex-col scrollbar-hide">
-      <GoBack onClick={() => navigate(-1)} />
+      <GoBack onClick={() => navigate("/")} />
       <MainContent doc={doc} isLoading={isLoading} />
     </div>
   );
