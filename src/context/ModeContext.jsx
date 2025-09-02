@@ -6,9 +6,19 @@ export function ModeProvider({ children }) {
   const [data, setData] = useState(null);
   const [title, setTitle] = useState("");
   const [mode, setMode] = useState("");
+  const [render, setRender] = useState(false);
   return (
     <ModeContext.Provider
-      value={{ mode, setMode, data, setData, title, setTitle }}
+      value={{
+        mode,
+        setMode,
+        data,
+        setData,
+        title,
+        setTitle,
+        render,
+        setRender,
+      }}
     >
       {children}
     </ModeContext.Provider>

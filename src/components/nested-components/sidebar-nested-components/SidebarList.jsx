@@ -1,7 +1,8 @@
 import { MoreVertical } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { fetchDocumentsByAuthor } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
+import ModeContext from "../../../context/ModeContext";
 
 function SidebarListSkeleton({ expanded, itemCount = 5 }) {
   return (
@@ -37,6 +38,7 @@ function SidebarListSkeleton({ expanded, itemCount = 5 }) {
 }
 
 function SidebarList({ expanded }) {
+  const { setRender, render } = useContext(ModeContext);
   const auth = JSON.parse(localStorage.getItem("auth"));
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,9 +66,12 @@ function SidebarList({ expanded }) {
 
       setItems(sortedItems);
       setLoading(false);
+      if (render) {
+        setRender(false);
+      }
     };
     getDocsByAuthor();
-  }, [auth?.username]);
+  }, [auth?.username, render, setRender]);
 
   if (loading) {
     return <SidebarListSkeleton expanded={expanded} itemCount={6} />;

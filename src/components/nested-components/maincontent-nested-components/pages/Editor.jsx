@@ -41,7 +41,13 @@ export default function Editor() {
   const { value: currentUser } = useLocalstorage("auth");
   const documentId = useLocation().state;
   const navigate = useNavigate();
-  const { data, title: contextTitle, mode, setMode } = useContext(ModeContext);
+  const {
+    data,
+    title: contextTitle,
+    mode,
+    setMode,
+    setRender,
+  } = useContext(ModeContext);
   const [, setRefresh] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(
@@ -90,6 +96,7 @@ export default function Editor() {
         author: currentUser.username,
       });
       navigate("/");
+      setRender(true);
     } catch (error) {
       console.error("Publishing failed:", error);
       showNotification("❌ Failed to publish. Please try again.", "error");
