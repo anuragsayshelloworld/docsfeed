@@ -1,30 +1,19 @@
 import { MoreVertical } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchDocumentsByAuthor } from "../../../firebase";
+
 function SidebarList({ expanded }) {
-  const items = [
-    "Frontend Interview Prep",
-    "Claude vs GPT",
-    "Next.js Routing",
-    "TypeScript Deep Dive",
-    "UI Design Tips",
-    "React Performance Tricks",
-    "Debugging Techniques",
-    "Chatbot UX Ideas",
-    "State Management Patterns",
-    "Microservices Basics",
-    "Git Best Practices",
-    "JavaScript Oddities",
-    "CSS Grid vs Flexbox",
-    "System Design Notes",
-    "Web Accessibility Tips",
-    "Next Auth Strategies",
-    "Refactoring Guide",
-    "Building Design Systems",
-    "Web Accessibility Tips",
-    "Next Auth Strategies",
-    "Refactoring Guide",
-    "Building Design Systems",
-  ];
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const getDocsByAuthor = async () => {
+      if (!auth?.username) return;
+      const response = await fetchDocumentsByAuthor(auth.username);
+      setItems(response); // response is already an array
+    };
+    getDocsByAuthor();
+  }, [auth?.username]);
 
   return (
     <div
@@ -36,12 +25,12 @@ function SidebarList({ expanded }) {
       </div>
 
       <div className="space-y-1 px-2 pb-2 pr-1 overflow-y-auto flex-1 scrollbar-hide">
-        {items.map((text, index) => (
+        {items.map((doc) => (
           <div
-            key={index}
+            key={doc.id}
             className="group flex justify-between items-center px-3 py-2 rounded-md hover:bg-gray-200 cursor-pointer text-sm text-gray-800"
           >
-            <span className="truncate flex-1">{text}</span>
+            <span className="truncate flex-1">{doc.title}</span>
             <MoreVertical className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
         ))}
@@ -49,4 +38,5 @@ function SidebarList({ expanded }) {
     </div>
   );
 }
+
 export default React.memo(SidebarList);

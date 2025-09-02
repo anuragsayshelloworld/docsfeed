@@ -178,3 +178,28 @@ export const updateDocument = async (id, data) => {
     console.error(`Error updating document with ID "${id}":`, error);
   }
 };
+/**
+ * Fetch all documents by a specific author.
+ * @param {string} author - Author's name to filter documents.
+ * @returns {Promise<Array>} Array of documents by the author.
+ */
+export const fetchDocumentsByAuthor = async (author) => {
+  try {
+    const docsQuery = query(
+      collection(db, "documents"),
+      where("author", "==", author)
+    );
+
+    const querySnapshot = await getDocs(docsQuery);
+
+    const docsList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return docsList;
+  } catch (error) {
+    console.error(`Error fetching documents for author "${author}":`, error);
+    return [];
+  }
+};
