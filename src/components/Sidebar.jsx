@@ -1,3 +1,4 @@
+// Sidebar.jsx
 import { useState, lazy, useEffect } from "react";
 import SidebarUser from "./nested-components/sidebar-nested-components/SidebarUser";
 import SidebarToggle from "./nested-components/sidebar-nested-components/SidebarToggle";
@@ -14,11 +15,10 @@ const SidebarList = lazy(() =>
 export default function Sidebar() {
   const isMobile = useMobile(756);
   const [expandSidebar, setExpandSideBar] = useState(true);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    if (isMobile) {
-      setExpandSideBar(false);
-    }
+    if (isMobile) setExpandSideBar(false);
   }, [isMobile]);
 
   return (
@@ -35,10 +35,11 @@ export default function Sidebar() {
         <SidebarItem expanded={expandSidebar} />
         <Projects expanded={expandSidebar} />
         <SidebarSearch
+          setSearchText={setSearchText}
           expanded={expandSidebar}
           expandWhenCollapsed={() => setExpandSideBar(true)}
         />
-        <SidebarList expanded={expandSidebar} />
+        <SidebarList expanded={expandSidebar} searchText={searchText} />
       </div>
 
       <SidebarUser expanded={expandSidebar} />

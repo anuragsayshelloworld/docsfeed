@@ -1,3 +1,4 @@
+// SidebarList.jsx
 import { MoreVertical } from "lucide-react";
 import React, {
   useContext,
@@ -11,11 +12,10 @@ import { useNavigate } from "react-router-dom";
 import ModeContext from "../../../context/ModeContext";
 import SidebarListSkeleton from "../../UI/SkeletonForSidebarList";
 
-function SidebarList({ expanded }) {
+function SidebarList({ expanded, searchText }) {
   const { setRender, render, setMode, setData, setTitle } =
     useContext(ModeContext);
 
-  // Memoize auth to prevent unnecessary re-renders
   const auth = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("auth"));
@@ -24,6 +24,7 @@ function SidebarList({ expanded }) {
     }
   }, []);
 
+  const [allItems, setAllItems] = useState([]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -31,31 +32,20 @@ function SidebarList({ expanded }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  // Memoize sorted items to prevent unnecessary re-sorting
-  const sortedItems = useMemo(() => {
-    return [...items].sort((a, b) => {
-      const dateA = a.savedAt?.toDate
-        ? a.savedAt.toDate()
-        : new Date(a.savedAt);
-      const dateB = b.savedAt?.toDate
-        ? b.savedAt.toDate()
-        : new Date(b.savedAt);
-      return dateB - dateA;
-    });
-  }, [items]);
-
+  // Fetch documents
   const fetchDocuments = useCallback(async () => {
     if (!auth?.username) {
       setLoading(false);
       return;
     }
-
     try {
       setLoading(true);
       const response = await fetchDocumentsByAuthor(auth.username);
+      setAllItems(response);
       setItems(response);
     } catch (error) {
       console.error("Error fetching documents:", error);
+      setAllItems([]);
       setItems([]);
     } finally {
       setLoading(false);
@@ -64,12 +54,10 @@ function SidebarList({ expanded }) {
 
   useEffect(() => {
     fetchDocuments();
-    if (render) {
-      setRender(false);
-    }
+    if (render) setRender(false);
   }, [fetchDocuments, render, setRender]);
 
-  // Optimize click outside handler
+  // Handle outside clicks
   const handleClickOutside = useCallback((event) => {
     const isDropdownClick = event.target.closest(".dropdown-container");
     const isConfirmDialog = event.target.closest(".confirm-dialog");
@@ -85,7 +73,31 @@ function SidebarList({ expanded }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [handleClickOutside]);
 
-  // Memoized handlers to prevent unnecessary re-renders
+  // Filter items based on searchText
+  useEffect(() => {
+    if (!searchText) setItems(allItems);
+    else
+      setItems(
+        allItems.filter((item) =>
+          item.title.toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
+  }, [searchText, allItems]);
+
+  // Sorted items
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      const dateA = a.savedAt?.toDate
+        ? a.savedAt.toDate()
+        : new Date(a.savedAt);
+      const dateB = b.savedAt?.toDate
+        ? b.savedAt.toDate()
+        : new Date(b.savedAt);
+      return dateB - dateA;
+    });
+  }, [items]);
+
+  // Handlers
   const handleDropdownToggle = useCallback((e, docId) => {
     e.stopPropagation();
     setActiveDropdown((current) => (current === docId ? null : docId));
@@ -118,23 +130,16 @@ function SidebarList({ expanded }) {
   const handleDeleteConfirm = useCallback(
     async (e, doc) => {
       e.stopPropagation();
-
-      if (isDeleting) return; // Prevent double clicks
+      if (isDeleting) return;
 
       try {
         setIsDeleting(true);
         setShowDeleteConfirm(null);
-
         await deleteDocument(doc.id);
-
-        // Optimistically update the UI instead of re-fetching
-        setItems((currentItems) =>
-          currentItems.filter((item) => item.id !== doc.id)
-        );
+        setAllItems((prev) => prev.filter((item) => item.id !== doc.id));
+        setItems((prev) => prev.filter((item) => item.id !== doc.id));
       } catch (error) {
         console.error("Error deleting document:", error);
-        // Optionally show error message to user
-        // You could add a toast notification here
       } finally {
         setIsDeleting(false);
       }
@@ -166,7 +171,6 @@ function SidebarList({ expanded }) {
       <div className="px-6 pt-4 pb-2 text-xs font-semibold text-gray-500 uppercase">
         My Documents
       </div>
-
       <div className="space-y-1 px-2 pb-2 pr-1 overflow-y-auto flex-1 scrollbar-hide">
         {sortedItems.map((doc) => (
           <SidebarListItem
@@ -189,7 +193,6 @@ function SidebarList({ expanded }) {
   );
 }
 
-// Separate component for each list item to prevent unnecessary re-renders
 const SidebarListItem = React.memo(
   ({
     doc,
@@ -208,41 +211,6 @@ const SidebarListItem = React.memo(
       onDocumentClick(doc);
     }, [doc, onDocumentClick]);
 
-    const handleDropdownToggle = useCallback(
-      (e) => {
-        onDropdownToggle(e, doc.id);
-      },
-      [doc.id, onDropdownToggle]
-    );
-
-    const handleEdit = useCallback(
-      (e) => {
-        onEdit(e, doc);
-      },
-      [doc, onEdit]
-    );
-
-    const handleShare = useCallback(
-      (e) => {
-        onShare(e, doc);
-      },
-      [doc, onShare]
-    );
-
-    const handleDeleteClick = useCallback(
-      (e) => {
-        onDeleteClick(e, doc);
-      },
-      [doc, onDeleteClick]
-    );
-
-    const handleDeleteConfirm = useCallback(
-      (e) => {
-        onDeleteConfirm(e, doc);
-      },
-      [doc, onDeleteConfirm]
-    );
-
     return (
       <div
         onClick={handleClick}
@@ -253,25 +221,25 @@ const SidebarListItem = React.memo(
         <div className="relative dropdown-container">
           <MoreVertical
             className="w-4 h-4 text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-gray-700"
-            onClick={handleDropdownToggle}
+            onClick={(e) => onDropdownToggle(e, doc.id)}
           />
 
           {activeDropdown === doc.id && (
             <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[120px]">
               <button
-                onClick={handleEdit}
+                onClick={(e) => onEdit(e, doc)}
                 className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 Edit
               </button>
               <button
-                onClick={handleShare}
+                onClick={(e) => onShare(e, doc)}
                 className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
               >
                 Share
               </button>
               <button
-                onClick={handleDeleteClick}
+                onClick={(e) => onDeleteClick(e, doc)}
                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors"
               >
                 Delete
@@ -296,7 +264,7 @@ const SidebarListItem = React.memo(
                   Cancel
                 </button>
                 <button
-                  onClick={handleDeleteConfirm}
+                  onClick={(e) => onDeleteConfirm(e, doc)}
                   disabled={isDeleting}
                   className="px-3 py-1.5 text-xs text-white bg-red-600 hover:bg-red-700 rounded transition-colors disabled:opacity-50"
                 >

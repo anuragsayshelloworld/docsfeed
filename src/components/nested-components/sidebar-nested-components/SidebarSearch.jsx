@@ -1,5 +1,12 @@
+// SidebarSearch.jsx
 import { Search as SearchIcon } from "lucide-react";
-export default function SidebarSearch({ expanded, expandWhenCollapsed }) {
+
+export default function SidebarSearch({
+  expanded,
+  expandWhenCollapsed,
+  searchText,
+  setSearchText,
+}) {
   return (
     <div
       className={`cursor-pointer flex items-center p-3 m-2 h-10 rounded-lg group hover:bg-gray-200 transition 
@@ -23,6 +30,8 @@ export default function SidebarSearch({ expanded, expandWhenCollapsed }) {
         <input
           type="text"
           placeholder="Search..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           className="w-full bg-transparent border-none outline-none text-sm text-gray-600 placeholder-gray-400"
         />
       </div>
