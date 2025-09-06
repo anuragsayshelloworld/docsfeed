@@ -79,7 +79,7 @@ export default function MainContent({ doc, isLoading }) {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">{doc.title}</h1>
           <div className="flex gap-2">
-            {role === 1 && (
+            {(role === 1 || doc.author === user.username) && (
               <>
                 <button
                   onClick={handleNavigate}
