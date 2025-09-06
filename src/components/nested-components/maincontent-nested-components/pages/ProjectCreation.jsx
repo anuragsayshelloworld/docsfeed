@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export default function ProjectCreation() {
+  const navigate = useNavigate();
   return (
     <div className="h-full w-full flex justify-center items-center p-4 sm:p-6">
       <div className="w-full max-w-full sm:max-w-lg md:max-w-2xl px-4 sm:px-8 md:px-16 py-6">
@@ -88,6 +91,7 @@ export default function ProjectCreation() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <button
+                onClick={() => navigate("/")}
                 type="button"
                 className="flex-1 px-4 py-2 text-gray-600 font-medium rounded-xl hover:bg-gray-100/50 transition-all duration-300 focus:ring-2 focus:ring-gray-400 focus:outline-none backdrop-blur-sm text-sm sm:text-base"
               >
