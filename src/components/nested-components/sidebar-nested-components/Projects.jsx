@@ -9,7 +9,7 @@ export default function Projects({ expanded }) {
     <>
       <div
         onClick={() => showNested(!nested)}
-        className={`flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group cursor-pointer 
+        className={`hidden md:flex items-center p-3 m-2 h-10 hover:bg-gray-200 transition rounded-lg group cursor-pointer 
         ${expanded ? "justify-start" : "justify-center"}`}
         title="Projects"
         aria-label="Projects"
