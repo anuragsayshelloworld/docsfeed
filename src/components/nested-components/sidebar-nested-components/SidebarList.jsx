@@ -1,4 +1,3 @@
-// SidebarList.jsx
 import { MoreVertical } from "lucide-react";
 import React, {
   useContext,

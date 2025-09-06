@@ -121,6 +121,7 @@ export default function Editor() {
         html: content,
       });
       navigate("/");
+      setRender(true);
     } catch (error) {
       console.error("Update failed:", error);
       showNotification("❌ Failed to update. Please try again.", "error");
