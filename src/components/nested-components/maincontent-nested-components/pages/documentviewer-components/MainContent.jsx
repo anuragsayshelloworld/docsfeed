@@ -14,7 +14,7 @@ export default function MainContent({ doc, isLoading }) {
   const navigate = useNavigate();
   const { value: user } = useLocalstorage("auth");
   const role = user.role;
-  const { setData, setTitle, setMode } = useContext(ModeContext);
+  const { setData, setTitle, setMode, setRender } = useContext(ModeContext);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -62,6 +62,7 @@ export default function MainContent({ doc, isLoading }) {
     setIsDeleting(true);
     await deleteDocument(doc.id);
     navigate("/");
+    setRender(true);
   }
 
   return (
