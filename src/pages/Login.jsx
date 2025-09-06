@@ -42,6 +42,7 @@ export default function Login() {
           userId: response.user.id,
           username: response.user.username,
           role: response.user.role,
+          image: response.user.image,
           timestamp: Date.now(),
         };
         setAuth(authObject);

@@ -132,6 +132,7 @@ export async function UserLogin(username, password) {
         id: userDoc.id,
         username: userData.username,
         role: userData.role,
+        image: userData.image || null,
       },
       userId: userDoc.id,
     };
