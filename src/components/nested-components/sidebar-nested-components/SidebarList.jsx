@@ -137,13 +137,14 @@ function SidebarList({ expanded, searchText }) {
         await deleteDocument(doc.id);
         setAllItems((prev) => prev.filter((item) => item.id !== doc.id));
         setItems((prev) => prev.filter((item) => item.id !== doc.id));
+        setRender(true);
       } catch (error) {
         console.error("Error deleting document:", error);
       } finally {
         setIsDeleting(false);
       }
     },
-    [isDeleting]
+    [isDeleting, setRender]
   );
 
   const handleDeleteCancel = useCallback((e) => {
