@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import { FileText, Edit, Trash2 } from "lucide-react";
 import LoaderSpinner from "../../../../../LoaderSpinner";
@@ -14,9 +14,17 @@ export default function MainContent({ doc, isLoading }) {
   const navigate = useNavigate();
   const { value: user } = useLocalstorage("auth");
   const role = user.role;
-  const { setData, setTitle, setMode, setRender } = useContext(ModeContext);
+  const { setData, setTitle, setMode, setRender, render } =
+    useContext(ModeContext);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (render) {
+      navigate("/");
+      setRender(false);
+    }
+  }, [render, navigate, setRender]);
 
   if (isLoading) {
     return (
