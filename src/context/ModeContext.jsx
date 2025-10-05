@@ -7,6 +7,7 @@ export function ModeProvider({ children }) {
   const [title, setTitle] = useState("");
   const [mode, setMode] = useState("");
   const [render, setRender] = useState(false);
+  const [projectaddedflag, setProjectAddedFlag] = useState(false);
   return (
     <ModeContext.Provider
       value={{
@@ -18,6 +19,8 @@ export function ModeProvider({ children }) {
         setTitle,
         render,
         setRender,
+        projectaddedflag,
+        setProjectAddedFlag,
       }}
     >
       {children}

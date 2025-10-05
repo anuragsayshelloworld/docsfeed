@@ -1,7 +1,8 @@
 import { FolderPlus, Plus, FolderOpen, FileText } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchProjects } from "../../../firebase";
+import ModeContext from "../../../context/ModeContext";
 
 export default function Projects({ expanded }) {
   const [nested, showNested] = useState(false);
@@ -73,6 +74,7 @@ function CreateProject({ expanded }) {
 }
 
 function MyProjects({ expanded }) {
+  const { setProjectAddedFlag, projectaddedflag } = useContext(ModeContext);
   const [showProjects, setShowProjects] = useState(false);
   const [projectsNameArray, setProjectNameArray] = useState([]);
   useEffect(() => {
@@ -81,7 +83,10 @@ function MyProjects({ expanded }) {
       setProjectNameArray(data);
     }
     getProjects();
-  }, [setProjectNameArray]);
+    if (projectaddedflag) {
+      setProjectAddedFlag(false);
+    }
+  }, [setProjectNameArray, projectaddedflag, setProjectAddedFlag]);
 
   return (
     <>

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProject } from "../../../../firebase";
+import ModeContext from "../../../../context/ModeContext";
 
 export default function ProjectCreation() {
   const navigate = useNavigate();
-
+  const { setProjectAddedFlag } = useContext(ModeContext);
   // State for form inputs
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -30,6 +31,7 @@ export default function ProjectCreation() {
 
     if (res.success) {
       console.log("Project created with ID:", res.id);
+      setProjectAddedFlag(true);
       navigate("/"); // redirect after creation
     } else {
       alert("Error creating project!");
