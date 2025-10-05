@@ -76,6 +76,22 @@ export const fetchDocuments = async () => {
   }
 };
 
+export const fetchProjects = async () => {
+  try {
+    const projQuery = query(collection(db, "projectDetails"));
+
+    const querySnapshot = await getDocs(projQuery);
+    const docsList = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      name: doc.data().projectName,
+    }));
+    return docsList;
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    return [];
+  }
+};
+
 /**
  * Fetch a single document by its ID.
  * @param {string} id - Firestore document ID.

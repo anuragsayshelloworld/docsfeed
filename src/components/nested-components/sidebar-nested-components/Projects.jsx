@@ -1,6 +1,7 @@
 import { FolderPlus, Plus, FolderOpen, FileText } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchProjects } from "../../../firebase";
 
 export default function Projects({ expanded }) {
   const [nested, showNested] = useState(false);
@@ -73,12 +74,14 @@ function CreateProject({ expanded }) {
 
 function MyProjects({ expanded }) {
   const [showProjects, setShowProjects] = useState(false);
-
-  const dummyProjects = [
-    { id: 1, name: "E-commerce App" },
-    { id: 2, name: "Portfolio Site" },
-    { id: 3, name: "Task Manager" },
-  ];
+  const [projectsNameArray, setProjectNameArray] = useState([]);
+  useEffect(() => {
+    async function getProjects() {
+      const data = await fetchProjects();
+      setProjectNameArray(data);
+    }
+    getProjects();
+  }, [setProjectNameArray]);
 
   return (
     <>
@@ -101,7 +104,7 @@ function MyProjects({ expanded }) {
 
       {showProjects && (
         <div className="flex flex-col ml-4 space-y-1 animate-slideIn">
-          {dummyProjects.map((project) => (
+          {projectsNameArray.map((project) => (
             <div
               key={project.id}
               className={`flex items-center p-2 h-7 transition rounded-md group cursor-pointer 
