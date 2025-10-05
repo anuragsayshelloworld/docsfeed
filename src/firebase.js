@@ -12,6 +12,7 @@ import {
   getDoc,
   deleteDoc,
   updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 // Your Firebase configuration
@@ -202,5 +203,29 @@ export const fetchDocumentsByAuthor = async (author) => {
   } catch (error) {
     console.error(`Error fetching documents for author "${author}":`, error);
     return [];
+  }
+};
+
+// Create a new project in Firestore
+export const createProject = async ({
+  projectName,
+  projectDescription,
+  collaborators = [],
+  technologies = "",
+}) => {
+  try {
+    const docRef = await addDoc(collection(db, "projectDetails"), {
+      projectName,
+      projectDescription,
+      collaborators,
+      technologies,
+      tasks: [], // initially empty
+      members: collaborators, // same as collaborators at first
+      createdAt: serverTimestamp(),
+    });
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error("Error creating project:", error);
+    return { success: false, error };
   }
 };
