@@ -245,3 +245,19 @@ export const createProject = async ({
     return { success: false, error };
   }
 };
+export const fetchProjectById = async (docId) => {
+  try {
+    const docRef = doc(db, "projectDetails", docId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.log("No document found!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    return null;
+  }
+};

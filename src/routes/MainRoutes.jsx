@@ -6,6 +6,7 @@ import LoaderSpinner from "../LoaderSpinner";
 import Login from "../pages/Login";
 import { ModeProvider } from "../context/ModeContext";
 import ProjectCreation from "../components/nested-components/maincontent-nested-components/pages/ProjectCreation";
+import ViewProject from "../components/nested-components/maincontent-nested-components/project-viewer/ViewProject";
 
 const Documentation = lazy(() =>
   import(
@@ -68,6 +69,7 @@ export default function MainRoutes() {
                 </Suspense>
               }
             />
+            <Route path="project/:id" element={<ViewProject />} />
           </Route>
 
           <Route path="login" element={<Login />} />

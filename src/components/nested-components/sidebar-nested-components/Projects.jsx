@@ -77,6 +77,7 @@ function MyProjects({ expanded }) {
   const { setProjectAddedFlag, projectaddedflag } = useContext(ModeContext);
   const [showProjects, setShowProjects] = useState(false);
   const [projectsNameArray, setProjectNameArray] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     async function getProjects() {
       const data = await fetchProjects();
@@ -111,6 +112,7 @@ function MyProjects({ expanded }) {
         <div className="flex flex-col ml-4 space-y-1 animate-slideIn">
           {projectsNameArray.map((project) => (
             <div
+              onClick={() => navigate(`project/${project.id}`)}
               key={project.id}
               className={`flex items-center p-2 h-7 transition rounded-md group cursor-pointer 
               hover:bg-gray-100 hover:shadow-sm ${!expanded && "hidden"}`}
