@@ -4,7 +4,6 @@ import useLocalstorage from "../../../hooks/useLocalStorage";
 export default function SidebarUser({ expanded }) {
   const [logoutSlider, setLogoutSlider] = useState(false);
   const { value: auth } = useLocalstorage("auth");
-  console.log(auth.image);
 
   return (
     <div className="relative">

@@ -15,8 +15,13 @@ export default function Documentation() {
 
   useEffect(() => {
     async function fetch() {
+      const name = JSON.parse(localStorage.getItem("auth")).username;
       const fetchDocs = await fetchDocuments();
-      setDocuments(fetchDocs || []);
+
+      // Filter by author on the client side
+      const userDocs = fetchDocs.filter((doc) => doc.author === name);
+
+      setDocuments(userDocs || []);
       setIsLoading(false);
     }
     fetch();

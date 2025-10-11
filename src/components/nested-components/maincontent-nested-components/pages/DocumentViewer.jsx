@@ -9,7 +9,6 @@ export default function DocumentViewer() {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
-
   const [doc, setDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
