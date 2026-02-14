@@ -6,22 +6,29 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
+    "@tiptap/extension-code-block-lowlight": "^3.19.0",
+    "@tiptap/extension-placeholder": "^3.19.0",
     "@tiptap/react": "^3.1.0",
     "@tiptap/starter-kit": "^3.1.0",
     "firebase": "^12.1.0",
     "highlight.js": "^11.11.1",
     "html-react-parser": "^5.2.6",
+    "lowlight": "^3.3.0",
     "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.8.0"
+    "react-router-dom": "^7.8.0",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@types/node": "^25.2.3",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.7.0",
@@ -32,6 +39,7 @@
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.3",
     "vite": "^7.1.0"
   }
 }

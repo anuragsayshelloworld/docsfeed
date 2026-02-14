@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1b2536 0%, #0f172a 45%, #070b16 100%);
+  color: #dbe4f4;
+  font-family: "IBM Plex Sans", "Manrope", "Segoe UI", sans-serif;
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

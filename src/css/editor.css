@@ -1,187 +1,154 @@
-/* Main ProseMirror editor styling */
 .ProseMirror {
-  min-height: 400px;
+  min-height: 520px;
   border: none;
-  padding: 32px;
   outline: none;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
+  padding: 2rem 2.1rem 2.3rem;
+  color: #dbe4f4;
+  background: linear-gradient(180deg, #0f172a 0%, #0a1220 100%);
+  font-family: "IBM Plex Sans", "Manrope", "Segoe UI", sans-serif;
   font-size: 16px;
-  line-height: 1.7;
-  color: #374151;
-  background: white;
+  line-height: 1.78;
 }
 
-/* Clean focus state */
 .ProseMirror:focus {
   outline: none;
 }
 
-/* Paragraph styling with subtle auto line numbering */
-.ProseMirror {
-  counter-reset: line-numbers;
-}
-
 .ProseMirror p {
-  margin-bottom: 18px;
-  margin-top: 0;
-  position: relative;
-  counter-increment: line-numbers;
-  padding-left: 35px;
+  margin: 0 0 1rem;
 }
 
 .ProseMirror p:last-child {
   margin-bottom: 0;
 }
 
-/* Subtle auto-numbering that matches sidebar aesthetic */
-.ProseMirror p::before {
-  content: counter(line-numbers);
-  position: absolute;
-  left: 0;
-  top: 2px;
-  width: 22px;
-  height: 22px;
-  background: #f3f4f6; /* Same as bg-gray-100 */
-  color: #6b7280; /* gray-500 */
-  border: 1px solid #e5e7eb; /* gray-200 */
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 500;
-  font-family: system-ui, sans-serif;
-}
-
-/* Slightly darker for better visibility on hover */
-.ProseMirror p:hover::before {
-  background: #e5e7eb; /* gray-200 */
-  color: #4b5563; /* gray-600 */
-}
-
-/* Special styling for empty paragraphs */
-.ProseMirror p.is-editor-empty::before {
-  background: #f9fafb; /* gray-50 */
-  color: #9ca3af; /* gray-400 */
-  border-color: #f3f4f6; /* gray-100 */
-}
-
-/* Make sure headings don't get numbered */
 .ProseMirror h1,
 .ProseMirror h2 {
-  counter-increment: none;
-  padding-left: 0;
-}
-
-.ProseMirror h1::before,
-.ProseMirror h2::before {
-  display: none;
-}
-
-/* Clean heading styles */
-.ProseMirror h1 {
-  font-size: 2.25em;
-  font-weight: 700;
-  margin-bottom: 20px;
-  margin-top: 28px;
+  margin: 2rem 0 1rem;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
   line-height: 1.2;
-  color: #111827; /* gray-900 */
+}
+
+.ProseMirror h1 {
+  font-size: 2.15rem;
+  font-weight: 700;
 }
 
 .ProseMirror h2 {
-  font-size: 1.75em;
-  font-weight: 600;
-  margin-bottom: 16px;
-  margin-top: 24px;
-  line-height: 1.3;
-  color: #1f2937; /* gray-800 */
+  font-size: 1.55rem;
+  font-weight: 650;
 }
 
-/* Simple list styling */
-.ProseMirror ol,
-.ProseMirror ul {
-  padding-left: 28px;
-  margin-bottom: 18px;
-  margin-top: 18px;
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 1rem 0;
+  padding-left: 1.6rem;
 }
 
 .ProseMirror li {
-  margin-bottom: 6px;
+  margin-bottom: 0.45rem;
+}
+
+.ProseMirror blockquote {
+  margin: 1.2rem 0;
+  border-left: 4px solid #38bdf8;
+  background: #0f1a2d;
+  padding: 0.9rem 1rem;
+  color: #cbd5e1;
+  border-radius: 0.25rem 0.6rem 0.6rem 0.25rem;
+}
+
+.ProseMirror :not(pre) > code {
+  border: 1px solid #334155;
+  background: #0b1220;
+  color: #67e8f9;
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.88em;
+  font-family: "JetBrains Mono", "SFMono-Regular", "Menlo", monospace;
+}
+
+.ProseMirror pre {
+  margin: 1.3rem 0;
+  border-radius: 0.95rem;
+  border: 1px solid #334155;
+  background: linear-gradient(180deg, #020617 0%, #020b1c 100%);
+  color: #dbeafe;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.18);
+}
+
+.ProseMirror pre code {
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.9rem;
   line-height: 1.7;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
 }
 
-.ProseMirror li p {
-  margin-bottom: 6px;
-  padding-left: 0; /* Remove padding for list items */
+.ProseMirror pre .hljs-keyword,
+.ProseMirror pre .hljs-selector-tag,
+.ProseMirror pre .hljs-meta {
+  color: #93c5fd;
 }
 
-.ProseMirror li p::before {
-  display: none; /* No numbering for list items */
+.ProseMirror pre .hljs-string,
+.ProseMirror pre .hljs-attr,
+.ProseMirror pre .hljs-template-string {
+  color: #86efac;
 }
 
-.ProseMirror ol li {
-  list-style-type: decimal;
-  color: #374151;
+.ProseMirror pre .hljs-number,
+.ProseMirror pre .hljs-literal,
+.ProseMirror pre .hljs-symbol {
+  color: #fca5a5;
 }
 
-.ProseMirror ul li {
-  list-style-type: disc;
-  color: #374151;
+.ProseMirror pre .hljs-title,
+.ProseMirror pre .hljs-function,
+.ProseMirror pre .hljs-type,
+.ProseMirror pre .hljs-title.function_ {
+  color: #f9a8d4;
 }
 
-/* Clean code styling */
-.ProseMirror code {
-  background: #f3f4f6; /* gray-100 */
-  color: #374151; /* gray-700 */
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-  border: 1px solid #e5e7eb; /* gray-200 */
+.ProseMirror pre .hljs-comment,
+.ProseMirror pre .hljs-quote {
+  color: #64748b;
 }
 
-/* Simple text styling */
-.ProseMirror strong {
-  font-weight: 600;
-  color: #111827; /* gray-900 */
+.ProseMirror pre .hljs-built_in,
+.ProseMirror pre .hljs-variable,
+.ProseMirror pre .hljs-property {
+  color: #fcd34d;
 }
 
-.ProseMirror em {
-  font-style: italic;
-  color: #4b5563; /* gray-600 */
-}
-
-/* Clean selection styling */
-.ProseMirror ::selection {
-  background: #e5e7eb; /* gray-200 */
-}
-
-/* Subtle placeholder styling */
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  color: #9ca3af; /* gray-400 */
+  color: #64748b;
   float: left;
   height: 0;
   pointer-events: none;
-  font-style: italic;
-  position: absolute;
-  left: 35px;
-  top: 0;
 }
 
-/* Responsive adjustments */
+.ProseMirror ::selection {
+  background: rgba(56, 189, 248, 0.3);
+}
+
 @media (max-width: 768px) {
   .ProseMirror {
-    padding: 20px;
-    font-size: 16px;
+    padding: 1.15rem 1rem 1.5rem;
+    font-size: 15px;
   }
 
   .ProseMirror h1 {
-    font-size: 2em;
+    font-size: 1.7rem;
   }
 
   .ProseMirror h2 {
-    font-size: 1.5em;
+    font-size: 1.3rem;
   }
 }
